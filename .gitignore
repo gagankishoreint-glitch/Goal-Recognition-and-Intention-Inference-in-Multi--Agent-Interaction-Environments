@@ -1,0 +1,21 @@
+# Git ignore patterns for Goal Recognition project
+.DS_Store
+**/.DS_Store
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+.env
+venv/
+*.egg-info/
+dist/
+build/
+.kilo/
+
+# generated datasets and experiment outputs (regenerate with the documented CLIs)
+data/*
+!data/.gitkeep
+results/*
+!results/.gitkeep
+.venv*/

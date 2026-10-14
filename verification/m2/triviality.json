@@ -1,0 +1,305 @@
+{
+  "dataset": {
+    "test": {
+      "episodes": 72,
+      "goal_counts": {
+        "0": 18,
+        "1": 25,
+        "2": 11,
+        "3": 18
+      },
+      "intention_counts": {
+        "DETOUR_LEFT": 699,
+        "DETOUR_RIGHT": 870,
+        "DIRECT": 1075,
+        "WAIT": 279
+      },
+      "scenarios": 9
+    },
+    "train": {
+      "episodes": 336,
+      "goal_counts": {
+        "0": 83,
+        "1": 80,
+        "2": 72,
+        "3": 101
+      },
+      "intention_counts": {
+        "DETOUR_LEFT": 2845,
+        "DETOUR_RIGHT": 2810,
+        "DIRECT": 5381,
+        "WAIT": 1433
+      },
+      "scenarios": 42
+    },
+    "val": {
+      "episodes": 72,
+      "goal_counts": {
+        "0": 17,
+        "1": 23,
+        "2": 14,
+        "3": 18
+      },
+      "intention_counts": {
+        "DETOUR_LEFT": 611,
+        "DETOUR_RIGHT": 476,
+        "DIRECT": 1134,
+        "WAIT": 239
+      },
+      "scenarios": 9
+    }
+  },
+  "feature_dim": {
+    "P1": 51,
+    "P2": 58,
+    "P3": 290
+  },
+  "flags": {
+    "intention_class_over_60pct": {
+      "test": false,
+      "train": false
+    },
+    "median_switches_zero": {
+      "test": false,
+      "train": false
+    }
+  },
+  "gaps": {
+    "accuracy": {
+      "ci_lower": 0.0692792405301994,
+      "ci_upper": 0.15768141751009906,
+      "metric": "accuracy",
+      "n_scenarios": 9,
+      "num_resamples": 2000,
+      "point_estimate": 0.11289770783441672
+    },
+    "macro_f1": {
+      "ci_lower": 0.2001180700208151,
+      "ci_upper": 0.29574722131595077,
+      "metric": "macro_f1",
+      "n_scenarios": 9,
+      "num_resamples": 2000,
+      "point_estimate": 0.2484647690629113
+    }
+  },
+  "gate": {
+    "ci_contains_zero": false,
+    "criterion": "95% scenario-cluster CI of the P3-P1 macro-F1 gap contains zero",
+    "status": "GREEN (CONTINUE)",
+    "verdict": "NON-TRIVIAL (CONTINUE)"
+  },
+  "label_stats": {
+    "test": {
+      "blocked_by_obstacle_or_boundary": 0.0,
+      "blocked_by_peer": 0.12418747861785837,
+      "blocked_step_rate": 0.12418747861785837,
+      "dwell_mean": 5.443202979515829,
+      "dwell_median": 4.0,
+      "episodes": 72,
+      "fraction_episodes_with_switch": 0.9305555555555556,
+      "goal_distribution": {
+        "0": 0.25,
+        "1": 0.3472222222222222,
+        "2": 0.1527777777777778,
+        "3": 0.25
+      },
+      "intention_distribution": {
+        "DETOUR_LEFT": 0.23913787204926445,
+        "DETOUR_RIGHT": 0.2976394115634622,
+        "DIRECT": 0.3677728361272665,
+        "WAIT": 0.09544988026000684
+      },
+      "max_intention_share": 0.3677728361272665,
+      "scenarios": 9,
+      "steps": 2923,
+      "switches_mean": 6.458333333333333,
+      "switches_median": 6.5
+    },
+    "train": {
+      "blocked_by_obstacle_or_boundary": 0.0,
+      "blocked_by_peer": 0.08934156708637421,
+      "blocked_step_rate": 0.08934156708637421,
+      "dwell_mean": 5.647192028985507,
+      "dwell_median": 4.0,
+      "episodes": 336,
+      "fraction_episodes_with_switch": 0.9464285714285714,
+      "goal_distribution": {
+        "0": 0.24702380952380953,
+        "1": 0.23809523809523808,
+        "2": 0.21428571428571427,
+        "3": 0.3005952380952381
+      },
+      "intention_distribution": {
+        "DETOUR_LEFT": 0.22816585131125192,
+        "DETOUR_RIGHT": 0.22535889004731735,
+        "DIRECT": 0.43155024460662444,
+        "WAIT": 0.11492501403480632
+      },
+      "max_intention_share": 0.43155024460662444,
+      "scenarios": 42,
+      "steps": 12469,
+      "switches_mean": 5.571428571428571,
+      "switches_median": 6.0
+    }
+  },
+  "probes": {
+    "P0": {
+      "accuracy": 0.3677728361272665,
+      "macro_f1": 0.1344422211105553,
+      "n_samples": 2923,
+      "n_scenarios": 9,
+      "per_intention": {
+        "DETOUR_LEFT": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 699
+        },
+        "DETOUR_RIGHT": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 870
+        },
+        "DIRECT": {
+          "f1": 0.5377688844422212,
+          "precision": 0.3677728361272665,
+          "recall": 1.0,
+          "support": 1075
+        },
+        "WAIT": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 279
+        }
+      }
+    },
+    "P1": {
+      "accuracy": 0.3581936366746493,
+      "ci95": {
+        "accuracy": [
+          0.3010754812876712,
+          0.41522710449255956
+        ],
+        "macro_f1": [
+          0.1624814782337719,
+          0.23662334138232827
+        ]
+      },
+      "macro_f1": 0.20278266996501518,
+      "n_samples": 2923,
+      "n_scenarios": 9,
+      "per_intention": {
+        "DETOUR_LEFT": {
+          "f1": 0.12121212121212122,
+          "precision": 0.24888888888888888,
+          "recall": 0.08011444921316166,
+          "support": 699
+        },
+        "DETOUR_RIGHT": {
+          "f1": 0.17562724014336917,
+          "precision": 0.3983739837398374,
+          "recall": 0.11264367816091954,
+          "support": 870
+        },
+        "DIRECT": {
+          "f1": 0.5073947667804323,
+          "precision": 0.3654240065546907,
+          "recall": 0.8297674418604651,
+          "support": 1075
+        },
+        "WAIT": {
+          "f1": 0.006896551724137931,
+          "precision": 0.09090909090909091,
+          "recall": 0.0035842293906810036,
+          "support": 279
+        }
+      }
+    },
+    "P2": {
+      "accuracy": 0.4156688333903524,
+      "ci95": {
+        "accuracy": [
+          0.3609864854011152,
+          0.4683596414765406
+        ],
+        "macro_f1": [
+          0.3516810991341062,
+          0.42356526378779974
+        ]
+      },
+      "macro_f1": 0.3928828429237332,
+      "n_samples": 2923,
+      "n_scenarios": 9,
+      "per_intention": {
+        "DETOUR_LEFT": {
+          "f1": 0.18811881188118812,
+          "precision": 0.3054662379421222,
+          "recall": 0.13590844062947066,
+          "support": 699
+        },
+        "DETOUR_RIGHT": {
+          "f1": 0.21843003412969283,
+          "precision": 0.423841059602649,
+          "recall": 0.1471264367816092,
+          "support": 870
+        },
+        "DIRECT": {
+          "f1": 0.5222474829490095,
+          "precision": 0.40119760479041916,
+          "recall": 0.747906976744186,
+          "support": 1075
+        },
+        "WAIT": {
+          "f1": 0.6427350427350428,
+          "precision": 0.6143790849673203,
+          "recall": 0.6738351254480287,
+          "support": 279
+        }
+      }
+    },
+    "P3": {
+      "accuracy": 0.47109134450906603,
+      "ci95": {
+        "accuracy": [
+          0.43139573406908743,
+          0.5022919470367762
+        ],
+        "macro_f1": [
+          0.41140939821668887,
+          0.4805962375454257
+        ]
+      },
+      "macro_f1": 0.45124743902792647,
+      "n_samples": 2923,
+      "n_scenarios": 9,
+      "per_intention": {
+        "DETOUR_LEFT": {
+          "f1": 0.24357754519505234,
+          "precision": 0.36363636363636365,
+          "recall": 0.18311874105865522,
+          "support": 699
+        },
+        "DETOUR_RIGHT": {
+          "f1": 0.35524475524475524,
+          "precision": 0.45357142857142857,
+          "recall": 0.29195402298850576,
+          "support": 870
+        },
+        "DIRECT": {
+          "f1": 0.5857294994675186,
+          "precision": 0.473593570608496,
+          "recall": 0.7674418604651163,
+          "support": 1075
+        },
+        "WAIT": {
+          "f1": 0.6204379562043796,
+          "precision": 0.6319702602230484,
+          "recall": 0.6093189964157706,
+          "support": 279
+        }
+      }
+    }
+  }
+}

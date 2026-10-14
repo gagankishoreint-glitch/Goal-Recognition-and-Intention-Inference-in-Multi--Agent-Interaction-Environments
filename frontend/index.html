@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f4f1">
+  <title>Live goal recognition sandbox</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg:#f4f4f1; --panel:#fff; --soft:#f0f0ed; --line:#c9c9c3;
+      --text:#111; --muted:#555; --accent:#111;
+      --blue:#111; --green:#111; --orange:#111; --pink:#111;
+    }
+    * { box-sizing:border-box }
+    body { margin:0; min-height:100vh; color:var(--text); background:var(--bg); font:14px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif }
+    .shell { width:min(1440px,100% - 32px); margin:auto; padding:22px 0 28px }
+    header { margin-bottom:14px }
+    .eyebrow { color:var(--muted); font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase }
+    h1 { margin:4px 0; font-size:clamp(24px,3.5vw,34px); line-height:1.1; letter-spacing:-.035em }
+    .intro { max-width:900px; margin:0; color:var(--muted) }
+    .card { border:1px solid #222; border-radius:10px; background:var(--panel); box-shadow:none }
+    .status { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:12px 0; padding:10px 13px; color:var(--muted) }
+    .status > div { min-width:0; flex:1 }
+    #train-progress { flex:none; white-space:nowrap; color:var(--text); font-variant-numeric:tabular-nums }
+    .status strong { color:var(--text) }
+    .status.error { border-color:#222; color:#111 }
+    .metrics { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px }
+    #metrics-footnote { display:block; margin-top:5px; color:var(--muted); font-size:10px }
+    .pill { display:inline-flex; padding:3px 7px; border:1px solid var(--line); border-radius:5px; color:var(--muted); font-size:10px }
+    .controls { display:flex; flex-wrap:wrap; align-items:center; gap:7px; padding:9px 11px; margin-bottom:12px }
+    button { min-height:34px; padding:5px 10px; border:1px solid #333; border-radius:6px; background:#fff; color:var(--text); font:inherit; cursor:pointer }
+    button:hover:not(:disabled) { background:#e8e8e4; border-color:#111 }
+    button:disabled { opacity:.45; cursor:not-allowed }
+    #play { color:#fff; background:#111; border-color:#111; font-weight:700 }
+    #play:hover:not(:disabled) { background:#333 }
+    input[type=number] { width:74px; min-height:34px; padding:5px 7px; border:1px solid #555; border-radius:6px; background:#fff; color:var(--text); font:inherit }
+    .small { margin-left:auto; color:var(--muted); font-size:12px }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; align-items:start }
+    .world-card { min-width:0; padding:11px }
+    .card-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px }
+    h2 { margin:0; font-size:15px }
+    #world-label { margin:2px 0 0; color:var(--muted); font-size:11px }
+    .world-stage { display:grid; grid-template-columns:minmax(0,1fr) minmax(230px,.35fr); gap:14px; align-items:center }
+    .tag { padding:2px 7px; border:1px solid #777; border-radius:5px; color:var(--muted); font-size:10px }
+    canvas { display:block; width:min(100%,min(82vh,760px)); aspect-ratio:1; margin-inline:auto; border:1px solid #222; border-radius:4px; background:#fff }
+    .episode-report { padding:12px; border:1px solid #222; border-radius:6px; background:#f8f8f5; font-size:12px; line-height:1.5 }
+    .episode-report strong { display:block; margin-bottom:4px }
+    .episode-report p { margin:0 }
+    .agent-table-card { min-width:0; padding:11px }
+    .table-scroll { overflow-x:auto; margin-top:8px }
+    .agent-table { width:100%; border-collapse:collapse; font-size:11px; text-align:left; white-space:nowrap }
+    .agent-table th { padding:7px 8px; border-bottom:1px solid #777; color:var(--muted); font-weight:700 }
+    .agent-table td { padding:7px 8px; border-bottom:1px solid #e1e1dc }
+    .agent-table tr:last-child td { border-bottom:0 }
+    .agent-table tbody tr { border-left:3px solid var(--agent-color,#111) }
+    .agent-table .agent-name { font-weight:700; color:var(--agent-color,#111) }
+    .status-badge { display:inline-block; padding:2px 6px; border:1px solid currentColor; border-radius:4px; font-weight:700 }
+    .status-arrived { color:#111; background:#e8e8e4 }
+    .status-blocked { color:#555 }
+    .status-moving { color:#222 }
+    .status-timeout { color:#777 }
+    .legend { display:flex; flex-wrap:wrap; gap:6px 12px; margin:8px 2px 0; color:var(--muted); font-size:10px }
+    .legend span { display:inline-flex; align-items:center; gap:6px }
+    .dot { width:9px; height:9px; border-radius:50%; background:#111 }
+    .dot.peer { background:#888 }
+    .square { width:9px; height:9px; border-radius:1px; background:#555 }
+    .goal-star { color:#111; font-size:15px; line-height:9px }
+    .side { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; min-width:0; align-items:start }
+    .section { min-width:0; padding:11px }
+    .section-head { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px }
+    .hint { margin:0; color:var(--muted); font-size:11px }
+    .belief-list { display:grid; gap:8px; margin-top:10px }
+    .belief-row { display:grid; grid-template-columns:35px 1fr 45px; gap:8px; align-items:center; font-size:12px }
+    .meter { height:7px; border-radius:2px; overflow:hidden; background:#e5e5e1 }
+    .fill { height:100%; border-radius:inherit; transition:width .15s ease; background:#111!important }
+    .prob { text-align:right; font-variant-numeric:tabular-nums }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:13px }
+    .model-box { padding:10px; border:1px solid var(--line); border-radius:6px; background:#fafaf8 }
+    .model-box strong { display:block; margin-bottom:3px; font-size:12px }
+    .model-box p { margin:0; color:var(--muted); font-size:11px }
+    .formula { margin:8px 0 0; padding:8px; border:1px solid #ddd; border-radius:5px; background:#f5f5f2; color:#111; font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere }
+    .agent-list { display:grid; gap:6px; margin-top:8px }
+    .agent-row { padding:7px 8px; border:1px solid var(--line); border-left:4px solid var(--agent-color,#111); border-radius:5px; background:#fafaf8 }
+    .agent-title { display:flex; justify-content:space-between; gap:8px; font-weight:700; font-size:11px }
+    .agent-title span:last-child { color:var(--muted); font-weight:500 }
+    .agent-detail { color:var(--muted); font-size:10px }
+    .action-bars { display:flex; gap:4px; margin-top:5px; height:5px }
+    .action-bars i { min-width:2px; border-radius:1px; background:#555!important }
+    .ground-truth { color:#222; font-size:10px; margin:7px 0 0 }
+    .bottom { display:flex; justify-content:space-between; gap:8px; margin-top:8px; color:var(--muted); font-size:11px }
+    .explain { margin-top:12px; padding:10px 12px; color:var(--muted); font-size:11px }
+    .explain strong { color:var(--text) }
+    .explain p { margin:4px 0 }
+    .hidden { display:none!important }
+    @media(max-width:760px) { .shell { width:calc(100% - 24px) } .side { grid-template-columns:repeat(2,minmax(0,1fr)) } .world-stage { grid-template-columns:minmax(0,1fr) } canvas { width:min(100%,620px) } .episode-report { width:min(100%,620px); margin-inline:auto } }
+    @media(max-width:620px) { .shell { width:calc(100% - 18px); padding-top:15px } .side { grid-template-columns:1fr } .small { width:100%; margin-left:0 } .info-grid { grid-template-columns:1fr } .status { align-items:flex-start } .metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px } .pill { min-width:0; justify-content:center; text-align:center; line-height:1.2 } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="eyebrow">Interactive model playground · CPU</div>
+      <h1>See what drives each move.</h1>
+      <p class="intro">Watch a neural policy move agents toward their goals, then compare a GRU’s hidden-goal estimates with a Bayesian filter.</p>
+    </header>
+
+    <section id="training" class="card status" aria-live="polite">
+      <div><strong id="train-title">Checking model training…</strong><div id="train-detail">Training small models on generated episodes.</div><div id="metrics" class="metrics"></div><small id="metrics-footnote" class="hidden">baseline = chance level for that label space</small></div>
+      <span id="train-progress">—</span>
+    </section>
+    <div id="error" class="card status error hidden" role="alert"></div>
+
+    <section id="controls" class="card controls hidden">
+      <button id="play" type="button">▶ Run</button>
+      <button id="step" type="button">Step once</button>
+      <button id="reset" type="button">Reset same seed</button>
+      <label for="seed" class="hint">Seed</label>
+      <input id="seed" type="number" value="42" min="0" aria-label="Simulation seed">
+      <button id="new-world" type="button">New world &amp; goals</button>
+      <span id="step-counter" class="small" aria-live="polite">step 0 / —</span>
+    </section>
+
+    <section id="simulation" class="layout hidden">
+      <section class="card world-card">
+        <div class="card-head"><div><h2>Live shared grid</h2><p id="world-label"></p></div><span id="step-label" class="tag">Step 0</span></div>
+        <div class="world-stage">
+          <canvas id="world" aria-label="Live agent positions, assigned goals, inferred goal, and obstacles"></canvas>
+          <div id="episode-report" class="episode-report" aria-live="polite"><strong>Episode in progress</strong><p>Run the simulation to see arrivals and the final outcome.</p></div>
+        </div>
+        <div class="legend">
+          <span><i class="dot"></i> focal agent</span><span><i class="dot peer"></i> other agents</span>
+          <span><i class="square"></i> obstacle</span><span class="goal-star">★ candidate destination</span>
+          <span>● assigned goal (simulator truth)</span><span>◇ inferred (model estimate)</span>
+          <span>dotted line: assigned-goal direction</span>
+        </div>
+        <div class="bottom"><span id="last-event">Ready. Select Step once or Run.</span></div>
+      </section>
+
+      <section class="card agent-table-card">
+        <div class="section-head"><h2>Live agent status</h2><span class="tag">assigned goals are simulator truth</span></div>
+        <div class="table-scroll">
+          <table class="agent-table">
+            <thead><tr><th>Agent</th><th>Cell</th><th>Heading to</th><th>Distance (Manhattan)</th><th>Intent</th><th>Last action</th><th>Status</th></tr></thead>
+            <tbody id="agent-status-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card section">
+          <div class="section-head"><h2>Hidden-goal inference</h2><span class="tag">focal agent</span></div>
+          <p class="hint">Estimates from observations; not ground truth. Only the focal agent is inferred.</p>
+          <h3 style="font-size:12px;margin:13px 0 0">GRU neural estimate</h3>
+          <div id="gru-beliefs" class="belief-list"></div>
+          <h3 style="font-size:12px;margin:14px 0 0">Bayesian filter comparison</h3>
+          <div id="bayes-beliefs" class="belief-list"></div>
+          <div class="formula">GRU: hₜ = GRU(xₜ, hₜ₋₁)<br>p(goal | history) = softmax(W hₜ + b)</div>
+          <div class="formula">Bayes: bₜ(g,i) ∝ P(aₜ | g,i,sₜ₋₁) Σᵢ′ P(i | i′) bₜ₋₁(g,i′)</div>
+          <p id="neural-intention" class="hint" style="margin-top:8px"></p>
+          <p class="hint" style="margin-top:8px">xₜ contains position, recent movement, candidate-goal geometry, map and nearby-agent features. It excludes the simulator’s hidden goal and intention labels.</p>
+        </section>
+        <section class="card section">
+          <div class="section-head"><h2>What drives the agents</h2><span class="tag">controller</span></div>
+          <p class="hint">The neural policy chooses an intention and a move; the simulator enforces minimum intention dwell and then applies simultaneous collision rules.</p>
+          <div class="formula">Iₜ ~ softmax(uθ(map, position, peers, goal, previous intention, blocked count, dwell))<br>Aₜ ~ softmax(qθ(map, position, peers, goal, Iₜ))<br>L = CE(Iexpert) + CE(Aexpert | Iexpert)</div>
+          <div id="agent-list" class="agent-list"></div>
+          <p id="ground-truth" class="ground-truth">Per-agent assigned destinations below are simulator truth, not recognizer inputs.</p>
+        </section>
+      </aside>
+    </section>
+
+    <section class="card explain">
+      <p><strong>How to read it:</strong> the neural policy samples an intention and then a move. The simulator enforces intention dwell and collision rules.</p>
+      <p>Agents know their own destinations. The GRU observer sees behavior, not destinations; its bars are estimates. Simulator destinations are displayed only to explain the run.</p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const actionNames = ["UP","DOWN","LEFT","RIGHT","WAIT"];
+      const canvas = document.querySelector("#world");
+      const ctx = canvas.getContext("2d");
+      let state = null;
+      let timer = null;
+      let busy = false;
+      let histories = new Map();
+      let agentLifecycle = new Map();
+      const color = id => {
+        const key = `agent-${id}`;
+        let hash = 2166136261;
+        for (let index = 0; index < key.length; index++) {
+          hash = Math.imul(hash ^ key.charCodeAt(index), 16777619);
+        }
+        return `hsl(${(hash >>> 0) % 360} 62% 38%)`;
+      };
+      const $ = id => document.getElementById(id);
+
+      function lifecycleFor(agent) {
+        if (!agentLifecycle.has(agent.id)) {
+          agentLifecycle.set(agent.id, {
+            arrived: false,
+            arrivalStep: null,
+            arrivalX: null,
+            arrivalY: null,
+            arrivalIntent: null,
+            arrivalAction: null,
+            blockedCount: 0
+          });
+        }
+        return agentLifecycle.get(agent.id);
+      }
+
+      function displayedAgent(agent) {
+        const lifecycle = lifecycleFor(agent);
+        if (!lifecycle.arrived) return agent;
+        return {
+          ...agent,
+          x: lifecycle.arrivalX,
+          y: lifecycle.arrivalY,
+          intention: lifecycle.arrivalIntent,
+          last_action: lifecycle.arrivalAction,
+          blocked: false
+        };
+      }
+
+      function agentStatus(agent) {
+        const lifecycle = lifecycleFor(agent);
+        if (lifecycle.arrived) return "arrived ✓";
+        if (state.frame.done) return "timed out";
+        if (agent.blocked) return "blocked";
+        return "moving";
+      }
+
+      async function api(path, body = {}) {
+        const response = await fetch(path, {
+          method: path.startsWith("/api/") && path !== "/api/status" ? "POST" : "GET",
+          headers: {"Content-Type":"application/json"},
+          body: path.startsWith("/api/") && path !== "/api/status" ? JSON.stringify(body) : undefined
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
+        return data;
+      }
+
+      function draw() {
+        if (!state) return;
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        const cell = Math.min(rect.width/state.grid.width,rect.height/state.grid.height);
+        const ox = (rect.width-cell*state.grid.width)/2;
+        const oy = (rect.height-cell*state.grid.height)/2;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0,0,rect.width,rect.height);
+        ctx.strokeStyle = "#deded9";
+        ctx.lineWidth = 1;
+        for(let x=0;x<=state.grid.width;x++){ctx.beginPath();ctx.moveTo(ox+x*cell,oy);ctx.lineTo(ox+x*cell,oy+state.grid.height*cell);ctx.stroke();}
+        for(let y=0;y<=state.grid.height;y++){ctx.beginPath();ctx.moveTo(ox,oy+y*cell);ctx.lineTo(ox+state.grid.width*cell,oy+y*cell);ctx.stroke();}
+        for(const [x,y] of state.obstacles){ctx.fillStyle="#333333";ctx.fillRect(ox+x*cell+1,oy+y*cell+1,cell-2,cell-2);}
+        const mostLikelyGoal = state.goals[
+          state.frame.neural_goal.indexOf(Math.max(...state.frame.neural_goal))
+        ];
+        for(const goal of state.goals){
+          const [x,y]=goal.position,cx=ox+(x+.5)*cell,cy=oy+(y+.5)*cell;
+          ctx.beginPath();ctx.arc(cx,cy,cell*.34,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle=color(goal.id);ctx.stroke();
+          ctx.fillStyle="#26323e";ctx.font=`700 ${Math.max(8,cell*.27)}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(`G${goal.id}`,cx,cy);
+          ctx.fillStyle="#111";ctx.font=`700 ${Math.max(8,cell*.2)}px system-ui`;ctx.fillText("★",cx-cell*.28,cy-cell*.28);
+          const assigned = state.frame.agents.filter(agent => agent.goal_id === goal.id);
+          assigned.forEach((agent,index)=>{
+            ctx.beginPath();ctx.arc(cx+cell*.28,cy-cell*.27+index*cell*.11,cell*.075,0,Math.PI*2);
+            ctx.fillStyle=color(agent.id);ctx.fill();ctx.lineWidth=1;ctx.strokeStyle="#fff";ctx.stroke();
+          });
+          if(mostLikelyGoal?.id===goal.id){
+            const dx=cx+cell*.28,dy=cy+cell*.27,size=cell*.12;
+            ctx.beginPath();ctx.moveTo(dx,dy-size);ctx.lineTo(dx+size,dy);ctx.lineTo(dx,dy+size);ctx.lineTo(dx-size,dy);ctx.closePath();
+            ctx.fillStyle="#fff";ctx.fill();ctx.lineWidth=2;ctx.strokeStyle="#111";ctx.stroke();
+          }
+          if(assigned.some(agent=>lifecycleFor(agent).arrived)){
+            ctx.beginPath();ctx.arc(cx,cy,cell*.45,0,Math.PI*2);ctx.lineWidth=Math.max(2,cell*.045);ctx.strokeStyle="#111";ctx.stroke();
+          }
+        }
+        for(const agent of state.frame.agents){
+          const shown = displayedAgent(agent);
+          const lifecycle = lifecycleFor(agent);
+          const path=histories.get(agent.id)||[];
+          if(path.length>1){
+            ctx.beginPath();path.forEach(([x,y],i)=>{const px=ox+(x+.5)*cell,py=oy+(y+.5)*cell;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});
+            ctx.strokeStyle=color(agent.id);ctx.lineWidth=agent.id===state.focal_agent_id?Math.max(3,cell*.09):Math.max(2,cell*.055);ctx.globalAlpha=.72;ctx.stroke();ctx.globalAlpha=1;
+          }
+          const goal=state.goals[agent.goal_id],gx=ox+(goal.position[0]+.5)*cell,gy=oy+(goal.position[1]+.5)*cell;
+          const ax=ox+(shown.x+.5)*cell,ay=oy+(shown.y+.5)*cell;
+          if(!lifecycle.arrived){
+            ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(gx,gy);ctx.setLineDash([3,4]);ctx.strokeStyle=color(agent.id);ctx.globalAlpha=.35;ctx.lineWidth=1.3;ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+          }
+          if(agent.blocked&&!lifecycle.arrived){ctx.beginPath();ctx.arc(ax,ay,cell*.42,0,Math.PI*2);ctx.strokeStyle=color(agent.id);ctx.lineWidth=2.5;ctx.stroke();}
+          const radius=cell*(agent.id===state.focal_agent_id ? .29 : .23);
+          ctx.beginPath();ctx.arc(ax,ay,radius,0,Math.PI*2);ctx.fillStyle=color(agent.id);ctx.fill();ctx.lineWidth=agent.id===state.focal_agent_id?3:2;ctx.strokeStyle="#ffffff";ctx.stroke();
+          ctx.fillStyle="#fff";ctx.font=`700 ${Math.max(8,cell*.21)}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(agent.id===state.focal_agent_id?"F":String(agent.id),ax,ay);
+          if(lifecycle.arrived){
+            const badge=cell*.25,bx=ax+radius*.8,by=ay-radius*.8;
+            ctx.beginPath();ctx.arc(bx,by,badge,0,Math.PI*2);ctx.fillStyle="#111";ctx.fill();
+            ctx.fillStyle="#fff";ctx.font=`700 ${Math.max(8,cell*.25)}px system-ui`;ctx.fillText("✓",bx,by);
+          }
+        }
+      }
+
+      function renderBeliefs(target, values) {
+        const root=$(target);root.replaceChildren();
+        state.goals.forEach((goal,index)=>{
+          const row=document.createElement("div");row.className="belief-row";
+          const label=document.createElement("span");label.textContent=`G${goal.id}`;label.style.color=color(goal.id);
+          const meter=document.createElement("div");meter.className="meter";
+          const fill=document.createElement("div");fill.className="fill";fill.style.width=`${Math.max(0,Math.min(1,values[index]))*100}%`;fill.style.background=color(goal.id);meter.append(fill);
+          const value=document.createElement("span");value.className="prob";value.textContent=`${(values[index]*100).toFixed(1)}%`;
+          row.append(label,meter,value);root.append(row);
+        });
+      }
+
+      function renderAgents() {
+        const root=$("agent-list");root.replaceChildren();
+        for(const agent of state.frame.agents){
+          const shown=displayedAgent(agent);
+          const lifecycle=lifecycleFor(agent);
+          const status=agentStatus(agent);
+          const row=document.createElement("div");row.className="agent-row";
+          row.style.setProperty("--agent-color",color(agent.id));
+          const title=document.createElement("div");title.className="agent-title";
+          const ownTarget=state.goals[agent.goal_id];
+          const who=agent.id===state.focal_agent_id?"Focal (F)":`Agent ${agent.id}`;
+          title.textContent=`${who} → G${agent.goal_id} · assigned (simulator)`;
+          const detail=document.createElement("div");detail.className="agent-detail";
+          const last=shown.last_action?`${shown.last_action}${shown.blocked?" (blocked)":""}`:"not selected";
+          detail.textContent=`Intent: ${shown.intention||"not selected"} · Last action: ${last} · Outcome: ${status}`;
+          const bars=document.createElement("div");bars.className="action-bars";
+          if(!lifecycle.arrived&&!state.frame.done){
+            for(let i=0;i<actionNames.length;i++){const bar=document.createElement("i");bar.title=`${actionNames[i]} ${(agent.action_probabilities[i]*100).toFixed(1)}%`;bar.style.width=`${Math.max(1,agent.action_probabilities[i]*100)}%`;bar.style.background=color(agent.id);bars.append(bar);}
+          }
+          row.append(title,detail);
+          if(bars.childElementCount)row.append(bars);
+          root.append(row);
+        }
+      }
+
+      function renderStatusTable() {
+        const root=$("agent-status-rows");root.replaceChildren();
+        for(const agent of state.frame.agents){
+          const shown=displayedAgent(agent);
+          const lifecycle=lifecycleFor(agent);
+          const goal=state.goals[agent.goal_id];
+          const distance=Math.abs(shown.x-goal.position[0])+Math.abs(shown.y-goal.position[1]);
+          const row=document.createElement("tr");
+          row.style.setProperty("--agent-color",color(agent.id));
+          const values=[
+            agent.id===state.focal_agent_id?"F (focal)":`Agent ${agent.id}`,
+            `(${shown.x}, ${shown.y})`,
+            `G${agent.goal_id} (${goal.position[0]}, ${goal.position[1]})`,
+            String(distance),
+            shown.intention||"—",
+            shown.last_action?`${shown.last_action}${shown.blocked?" · blocked":""}`:"—",
+            agentStatus(agent)
+          ];
+          values.forEach((value,index)=>{
+            const cell=document.createElement("td");
+            if(index===0){cell.className="agent-name";cell.textContent=value;}
+            else if(index===6){
+              const badge=document.createElement("span");
+              badge.className=`status-badge ${lifecycle.arrived?"status-arrived":state.frame.done?"status-timeout":agent.blocked?"status-blocked":"status-moving"}`;
+              badge.textContent=value;
+              cell.append(badge);
+            }else cell.textContent=value;
+            row.append(cell);
+          });
+          root.append(row);
+        }
+      }
+
+      function renderEpisodeReport() {
+        const report=$("episode-report");
+        const heading=document.createElement("strong");
+        const copy=document.createElement("p");
+        if(!state.frame.done){
+          heading.textContent="Episode in progress";
+          copy.textContent=`step ${state.frame.step} / ${state.max_steps}`;
+        }else{
+          const endNames={GOAL_REACHED:"ARRIVED",MAX_STEPS:"MAX_STEPS",DEADLOCK_LIMIT:"DEADLOCK"};
+          const focal=state.frame.agents.find(agent=>agent.id===state.focal_agent_id);
+          const focalLife=lifecycleFor(focal);
+          const goal=state.goals[focal.goal_id];
+          const goalName=`G${focal.goal_id}`;
+          const reached=state.frame.agents.filter(agent=>lifecycleFor(agent).arrived);
+          heading.textContent=`ended: ${endNames[state.frame.termination_reason]||state.frame.termination_reason}`;
+          let detail;
+          if(focalLife.arrived){
+            detail=`step ${state.frame.step}/${state.max_steps}, focal agent ${focal.id} reached ${goalName} after ${focalLife.arrivalStep} steps`;
+          }else{
+            const shown=displayedAgent(focal);
+            const distance=Math.abs(shown.x-goal.position[0])+Math.abs(shown.y-goal.position[1]);
+            const intent=shown.intention||"not selected";
+            detail=`step ${state.frame.step}/${state.max_steps}, focal agent ${focal.id} is ${distance} cells short of ${goalName}, blocked ${focalLife.blockedCount} times, intent ${intent}`;
+          }
+          if(reached.length===0){
+            detail+=`; no agent reached its goal within the horizon`;
+          }else if(!focalLife.arrived){
+            const labels=reached.map(agent=>`agent ${agent.id} reached G${agent.goal_id}`).join(", ");
+            detail+=`; ${labels}`;
+          }
+          copy.textContent=detail+".";
+        }
+        report.replaceChildren(heading,copy);
+      }
+
+      function render() {
+        if(!state)return;
+        $("step-label").textContent=`Step ${state.frame.step}${state.frame.done?" · "+state.frame.termination_reason:""}`;
+        $("world-label").textContent=`${state.scenario_family} map · seed ${state.seed} · goals ${state.goals.map(goal=>`G${goal.id}`).join(", ")}`;
+        $("step-counter").textContent=`step ${state.frame.step} / ${state.max_steps}`;
+        const focal=state.frame.agents.find(agent=>agent.id===state.focal_agent_id);
+        const shownFocal=displayedAgent(focal);
+        $("last-event").textContent=state.frame.step===0?"Ready. Select Step once or Run.":state.frame.done?`Episode ended: ${state.frame.termination_reason}.`:`Focal agent: ${shownFocal.last_action||"no action yet"}${shownFocal.blocked?" · blocked":""}.`;
+        renderBeliefs("gru-beliefs",state.frame.neural_goal);
+        renderBeliefs("bayes-beliefs",state.frame.bayesian_goal);
+        const intentionIndex=state.frame.neural_intention.indexOf(Math.max(...state.frame.neural_intention));
+        $("neural-intention").textContent=`GRU intention estimate (not simulator truth): ${["DIRECT","DETOUR_LEFT","DETOUR_RIGHT","WAIT"][intentionIndex]} · ${(state.frame.neural_intention[intentionIndex]*100).toFixed(1)}%`;
+        renderStatusTable();
+        renderAgents();
+        if(state.frame.final_reveal){
+          $("ground-truth").textContent=`Episode ended. Simulator focal destination: G${state.frame.final_reveal.focal_goal_id}. (It was hidden from the recognizer.)`;
+        }else{
+          $("ground-truth").textContent="Assigned destinations are simulator truth; the GRU cannot access them.";
+        }
+        renderEpisodeReport();
+        draw();
+      }
+
+      function update(stateValue, resetHistory=false) {
+        state=stateValue;
+        if(resetHistory){histories=new Map();agentLifecycle=new Map();}
+        for(const agent of state.frame.agents){
+          const lifecycle=lifecycleFor(agent);
+          const hadArrived=lifecycle.arrived;
+          const goal=state.goals[agent.goal_id];
+          if(!lifecycle.arrived&&agent.x===goal.position[0]&&agent.y===goal.position[1]){
+            lifecycle.arrived=true;
+            lifecycle.arrivalStep=state.frame.step;
+            lifecycle.arrivalX=agent.x;
+            lifecycle.arrivalY=agent.y;
+            lifecycle.arrivalIntent=agent.intention;
+            lifecycle.arrivalAction=agent.last_action;
+          }
+          if(agent.blocked&&!lifecycle.arrived)lifecycle.blockedCount+=1;
+          if(!histories.has(agent.id))histories.set(agent.id,[]);
+          const path=histories.get(agent.id);
+          if(hadArrived)continue;
+          const last=path[path.length-1];
+          if(!last||last[0]!==agent.x||last[1]!==agent.y)path.push([agent.x,agent.y]);
+        }
+        render();
+      }
+      async function newWorld(seed) { stop();setBusy(true);try{const result=await api("/api/new",{seed});$("seed").value=result.seed;update(result,true);}catch(error){showError(error.message);}finally{setBusy(false);} }
+      async function advance() { if(busy||!state||state.frame.done)return;setBusy(true);try{update(await api("/api/step",{}));}catch(error){stop();showError(error.message);}finally{setBusy(false);} }
+      function setBusy(value){busy=value;$("step").disabled=value;$("reset").disabled=value;$("new-world").disabled=value;}
+      function stop(){if(timer!==null)clearInterval(timer);timer=null;$("play").textContent="▶ Run";$("play").setAttribute("aria-label","Run simulation");}
+      function showError(message){$("error").textContent=message;$("error").classList.remove("hidden");}
+
+      $("step").addEventListener("click",advance);
+      $("play").addEventListener("click",()=>{
+        if(timer!==null){stop();return;}
+        if(state?.frame.done){newWorld(Number($("seed").value));return;}
+        $("play").textContent="Ⅱ Pause";
+        timer=setInterval(()=>{if(state?.frame.done){stop();return;}advance();},450);
+      });
+      $("reset").addEventListener("click",()=>newWorld(Number($("seed").value)));
+      $("new-world").addEventListener("click",()=>{const seed=Number($("seed").value)+1;newWorld(seed);});
+      window.addEventListener("resize",draw);
+
+      function renderMetrics(metrics) {
+        const root=$("metrics");root.replaceChildren();
+        for(const text of [
+          `Policy MLP · ${(metrics.action_policy_parameters/1e6).toFixed(2)}M params`,
+          `Goal GRU · ${(metrics.goal_recognizer_parameters/1e6).toFixed(2)}M params`,
+          `Intention · ${(metrics.action_policy_intention_accuracy*100).toFixed(1)}% (baseline 25%)`,
+          `Action · ${(metrics.action_policy_action_accuracy_using_model_intention*100).toFixed(1)}% (baseline 20%)`,
+          `Action w/ expert intent · ${(metrics.action_policy_action_accuracy_given_expert_intention*100).toFixed(1)}% (baseline 20%)`,
+          `GRU goal · ${(metrics.goal_accuracy*100).toFixed(1)}% (baseline 25%)`,
+          `Bayes goal · ${(metrics.bayesian_test_goal_accuracy*100).toFixed(1)}%`,
+          `${metrics.training_episodes} train / ${metrics.test_episodes} test`
+        ]){const pill=document.createElement("span");pill.className="pill";pill.textContent=text;root.append(pill);}
+        $("metrics-footnote").classList.remove("hidden");
+        $("train-detail").textContent=metrics.training_description;
+      }
+
+      async function pollStatus() {
+        try{
+          const result=await api("/api/status");
+          $("train-title").textContent=result.stage;
+          $("train-progress").textContent=`training ${result.current} / ${result.total}`;
+          if(result.error){showError(`Model training failed: ${result.error}`);return;}
+          if(result.ready){
+            renderMetrics(result.metrics);
+            $("train-progress").hidden=true;
+            $("controls").classList.remove("hidden");
+            $("simulation").classList.remove("hidden");
+            await newWorld(Number($("seed").value));
+            return;
+          }
+        }catch(error){showError(`Cannot reach the Python server: ${error.message}`);return;}
+        window.setTimeout(pollStatus,1000);
+      }
+      pollStatus();
+    })();
+  </script>
+</body>
+</html>

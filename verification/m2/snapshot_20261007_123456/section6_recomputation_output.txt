@@ -1,0 +1,90 @@
+/opt/anaconda3/lib/python3.14/site-packages/sklearn/metrics/_classification.py:1879: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/opt/anaconda3/lib/python3.14/site-packages/sklearn/metrics/_classification.py:1879: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/opt/anaconda3/lib/python3.14/site-packages/sklearn/metrics/_classification.py:1879: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+=== Section 6: Intention Triviality Probe (Frozen Version) ===
+Generating dataset: 5 scenarios, 3 episodes per scenario
+  Scenario 1/5: 0d76848088396086
+  Scenario 2/5: 9aa853f02ee92907
+  Scenario 3/5: 4f806685946e271a
+  Scenario 4/5: 911151ee9b780474
+  Scenario 5/5: 911151ee9b780474
+Generated 15 total episodes
+Splitting dataset: 70% train, 30% test (scenario-level split)
+Found 4 unique scenarios
+Train scenarios: 3
+Test scenarios: 1
+Train episodes: 12
+Test episodes: 3
+Running frozen triviality protocol...
+Processing training episodes...
+Processing test episodes...
+Training samples: P1=269, P3=269
+Test samples: P1_test=83, P3_test=83
+Computing P0 (Majority baseline)...
+Training P1 (Geometry-only primary probe)...
+Training P3 (Stacked-history reference)...
+Computing 95% scenario-cluster-bootstrap CI for P3−P1 Macro-F1 gap...
+DEBUG: result keys: ['P0', 'P1', 'P3', 'gaps', 'confidence_intervals', 'n_train', 'n_test']
+DEBUG: confidence_intervals keys: ['accuracy_gap', 'macro_f1_gap']
+DEBUG: result type: <class 'dict'>
+DEBUG: result: {'P0': {'accuracy': 0.5180722891566265, 'macro_f1': 0.17063492063492064, 'per_intent': {'DETOUR_LEFT': {'precision': np.float64(0.5180722891566265), 'recall': np.float64(1.0), 'f1': np.float64(0.6825396825396826)}, 'DETOUR_RIGHT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}, 'DIRECT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}, 'WAIT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}}}, 'P1': {'accuracy': 0.46987951807228917, 'macro_f1': 0.19306930693069307, 'per_intent': {'DETOUR_LEFT': {'precision': np.float64(0.6724137931034483), 'recall': np.float64(1.0), 'f1': np.float64(0.7722772277227723)}, 'DETOUR_RIGHT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}, 'DIRECT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}, 'WAIT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}}}, 'P3': {'accuracy': 0.5180722891566265, 'macro_f1': 0.18695652173913044, 'per_intent': {'DETOUR_LEFT': {'precision': np.float64(0.5972222222222222), 'recall': np.float64(1.0), 'f1': np.float64(0.7478260869565218)}, 'DETOUR_RIGHT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}, 'DIRECT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}, 'WAIT': {'precision': np.float64(0.0), 'recall': np.float64(0.0), 'f1': np.float64(0.0)}}}, 'gaps': {'accuracy': 0.04819277108433734, 'macro_f1': -0.006112785191562636}, 'confidence_intervals': {'accuracy_gap': [0.0, 0.0], 'macro_f1_gap': [np.float64(0.0043240284619595615), np.float64(0.18945573400930033)]}, 'n_train': 12, 'n_test': 3}
+DEBUG: cis type: <class 'dict'>
+DEBUG: cis: {'accuracy_gap': [0.0, 0.0], 'macro_f1_gap': [np.float64(0.0043240284619595615), np.float64(0.18945573400930033)]}
+
+=== RESULTS ===
+P0 (Majority baseline):
+  Accuracy: 0.5181
+  Macro-F1: 0.1706
+
+P1 (Geometry-only primary probe):
+  Accuracy: 0.4699
+  Macro-F1: 0.1931
+
+P3 (Stacked-history reference, k=5):
+  Accuracy: 0.5181
+  Macro-F1: 0.1870
+
+Gaps (P3 - P1):
+  Accuracy: 0.0482
+  Macro-F1: -0.0061
+
+95% Scenario-Cluster-Bootstrap Confidence Intervals:
+  Accuracy gap: [0.0000, 0.0000]
+  Macro-F1 gap: [0.0043, 0.1895]
+
+=== ADDITIONAL STATISTICS ===
+Training set:
+  Intention distribution: {'DIRECT': 53.159851301115246, 'DETOUR_LEFT': 14.12639405204461, 'WAIT': 20.817843866171003, 'DETOUR_RIGHT': 11.895910780669144}
+  Goal distribution: {'(7, 7)': 19.33085501858736, '(6, 6)': 80.66914498141264}
+  Intention dwell - Mean: 5.85, Median: 4.00
+  Switches per episode - Mean: 3.00, Median: 3.00
+  Fraction episodes with >=1 switch: 91.67%
+  Blocked-step rate: 8.55%
+  Blocked steps (peer/obstacle): 0.00% / 0.00%
+
+Test set:
+  Intention distribution: {'DETOUR_RIGHT': 28.915662650602407, 'DETOUR_LEFT': 14.457831325301203, 'DIRECT': 51.80722891566265, 'WAIT': 4.819277108433735}
+  Goal distribution: {'(6, 6)': 100.0}
+  Intention dwell - Mean: 4.88, Median: 4.00
+  Switches per episode - Mean: 4.67, Median: 4.00
+  Fraction episodes with >=1 switch: 100.00%
+  Blocked-step rate: 15.66%
+  Blocked steps (peer/obstacle): 0.00% / 0.00%
+
+=== FLAGGING CONDITIONS ===
+Maximum intention class percentage: 53.16%
+  OK: No intention class >60% of labels
+Median switches per episode: 4.00
+  OK: Median switches per episode > 0
+
+=== TRIVIALITY GATE ===
+DEBUG: About to access cis['macro_f1_gap']
+DEBUG: cis is {'accuracy_gap': [0.0, 0.0], 'macro_f1_gap': [np.float64(0.0043240284619595615), np.float64(0.18945573400930033)]}
+DEBUG: type of cis is <class 'dict'>
+DEBUG: Successfully accessed macro_f1_gap: [0.0043240284619595615, 0.18945573400930033]
+95% CI for P3−P1 Macro-F1 gap: [0.0043, 0.1895]
+  RESULT: 95% CI does NOT contain zero → INTENTION LABELS ARE NOT GEOMETRICALLY TRIVIAL
+  GATE STATUS: GREEN (CONTINUE)

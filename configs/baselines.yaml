@@ -1,0 +1,12 @@
+baselines:
+  # All three baselines predict P(G | O_{1:t}) over the K candidate targets.
+  random:
+    prior_type: "uniform"       # fair random guess; expected accuracy 1/K
+  heuristic:
+    inverse_temperature: 0.5    # softmax(-beta * cost) from the current position
+    distance_metric: "shortest_path"  # "manhattan" | "shortest_path" (obstacle-aware BFS)
+  bayesian:
+    rationality_beta: 1.0       # exponent on the emission likelihood
+    prior_type: "uniform"
+    intention_persist: 0.85     # P(I_t = I_{t-1}) in the recursive belief update
+    block_rate: 0.05            # used only when `blocked` is unobservable (Condition B)

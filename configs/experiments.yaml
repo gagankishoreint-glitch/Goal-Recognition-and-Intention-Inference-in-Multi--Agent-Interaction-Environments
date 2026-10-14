@@ -1,0 +1,28 @@
+experiments:
+  seeds: [42, 43, 44, 45, 46]
+  device: "cpu"               # all reported results must use the CPU execution path
+  bootstrap:
+    num_resamples: 2000
+    level: 0.95
+    unit: "scenario"          # scenario-level resampling to account for correlated episodes
+
+  interaction_conditions:
+    - "full_observation"      # Condition A: P(G | A_A, A_-A, E)
+    - "interaction_masked"    # Condition B: P(G | A_A, E), same underlying episodes
+
+  early_recognition:
+    observation_fractions: [0.10, 0.20, 0.30, 0.50, 0.75, 1.00]
+    
+  multi_agent:
+    agent_counts: [1, 2, 4]
+    
+  noise_robustness:
+    gaussian_sigmas: [0.0, 0.2, 0.5, 1.0]
+    missing_rates: [0.0, 0.10, 0.25, 0.50]
+    
+  ablations:
+    variants:
+      - "full_model"
+      - "no_other_agents"
+      - "no_velocities"
+      - "no_goal_rel_vectors"

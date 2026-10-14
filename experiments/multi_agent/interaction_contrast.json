@@ -1,0 +1,679 @@
+{
+  "bayes": {
+    "0.30": {
+      "A_full": {
+        "accuracy": 0.4861111111111111,
+        "accuracy_ci95": [
+          0.3611111111111111,
+          0.6111111111111112
+        ],
+        "brier": 0.6068199621832382,
+        "brier_ci95": [
+          0.5085770321962946,
+          0.705095696679198
+        ],
+        "macro_f1": 0.4742888312317204,
+        "macro_f1_ci95": [
+          0.3481163180557777,
+          0.58232994117545
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "A_full",
+        "nll": 1.0633454362028898,
+        "nll_ci95": [
+          0.8806225400777462,
+          1.250221924241671
+        ],
+        "top2_accuracy": 0.7777777777777778,
+        "top2_accuracy_ci95": [
+          0.6388888888888888,
+          0.9166666666666666
+        ]
+      },
+      "B_masked": {
+        "accuracy": 0.4583333333333333,
+        "accuracy_ci95": [
+          0.3472222222222222,
+          0.5555555555555556
+        ],
+        "brier": 0.6090505302069532,
+        "brier_ci95": [
+          0.5060439916464181,
+          0.7111570652825799
+        ],
+        "macro_f1": 0.44778892604979564,
+        "macro_f1_ci95": [
+          0.3290117472463802,
+          0.5537081281862011
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "B_masked",
+        "nll": 1.062817448480333,
+        "nll_ci95": [
+          0.8703314378423501,
+          1.2583639662497037
+        ],
+        "top2_accuracy": 0.7777777777777778,
+        "top2_accuracy_ci95": [
+          0.6388888888888888,
+          0.9166666666666666
+        ]
+      },
+      "gap": {
+        "accuracy": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.06944444444444442,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.02777777777777779
+        },
+        "macro_f1": {
+          "ci_lower": -6.662362022266609e-05,
+          "ci_upper": 0.06048857537594771,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.026499905181924743
+        },
+        "nll": {
+          "ci_lower": -0.04489349075229258,
+          "ci_upper": 0.05228811682569856,
+          "metric": "nll",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.0005279877225567997
+        }
+      }
+    },
+    "0.50": {
+      "A_full": {
+        "accuracy": 0.6666666666666666,
+        "accuracy_ci95": [
+          0.4722222222222222,
+          0.8333333333333334
+        ],
+        "brier": 0.4109314931428323,
+        "brier_ci95": [
+          0.27342863065630674,
+          0.5416972988503148
+        ],
+        "macro_f1": 0.6725053858206033,
+        "macro_f1_ci95": [
+          0.46503304057483624,
+          0.8391959307577801
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "A_full",
+        "nll": 0.7131906162891585,
+        "nll_ci95": [
+          0.4759141466705505,
+          0.9414341423128264
+        ],
+        "top2_accuracy": 0.875,
+        "top2_accuracy_ci95": [
+          0.75,
+          0.9722222222222222
+        ]
+      },
+      "B_masked": {
+        "accuracy": 0.6666666666666666,
+        "accuracy_ci95": [
+          0.4722222222222222,
+          0.8333333333333334
+        ],
+        "brier": 0.4168191444315762,
+        "brier_ci95": [
+          0.26865628086957943,
+          0.5537654641631844
+        ],
+        "macro_f1": 0.6725053858206033,
+        "macro_f1_ci95": [
+          0.46503304057483624,
+          0.8391959307577801
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "B_masked",
+        "nll": 0.7302653500042007,
+        "nll_ci95": [
+          0.477985279701299,
+          0.9730995999850678
+        ],
+        "top2_accuracy": 0.875,
+        "top2_accuracy_ci95": [
+          0.75,
+          0.9722222222222222
+        ]
+      },
+      "gap": {
+        "accuracy": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.0
+        },
+        "macro_f1": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.0
+        },
+        "nll": {
+          "ci_lower": -0.04571064398535022,
+          "ci_upper": 0.007045472840064659,
+          "metric": "nll",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.0170747337150422
+        }
+      }
+    },
+    "0.75": {
+      "A_full": {
+        "accuracy": 0.7777777777777778,
+        "accuracy_ci95": [
+          0.6388888888888888,
+          0.9027777777777778
+        ],
+        "brier": 0.27717535006215877,
+        "brier_ci95": [
+          0.1476805330360373,
+          0.4123619684273564
+        ],
+        "macro_f1": 0.7722222222222221,
+        "macro_f1_ci95": [
+          0.609364983974359,
+          0.9020886428869002
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "A_full",
+        "nll": 0.5063527052837729,
+        "nll_ci95": [
+          0.28379066256323443,
+          0.7428464865928478
+        ],
+        "top2_accuracy": 0.9166666666666666,
+        "top2_accuracy_ci95": [
+          0.8055555555555556,
+          1.0
+        ]
+      },
+      "B_masked": {
+        "accuracy": 0.7777777777777778,
+        "accuracy_ci95": [
+          0.6388888888888888,
+          0.9027777777777778
+        ],
+        "brier": 0.28560056918613014,
+        "brier_ci95": [
+          0.15095396881075268,
+          0.4250937336128942
+        ],
+        "macro_f1": 0.7722222222222221,
+        "macro_f1_ci95": [
+          0.609364983974359,
+          0.9020886428869002
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "B_masked",
+        "nll": 0.5196744326983214,
+        "nll_ci95": [
+          0.282665635250736,
+          0.7727713364951935
+        ],
+        "top2_accuracy": 0.9166666666666666,
+        "top2_accuracy_ci95": [
+          0.8055555555555556,
+          1.0
+        ]
+      },
+      "gap": {
+        "accuracy": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.0
+        },
+        "macro_f1": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.0,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.0
+        },
+        "nll": {
+          "ci_lower": -0.048128530134063256,
+          "ci_upper": 0.017471690978371698,
+          "metric": "nll",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.013321727414548512
+        }
+      }
+    },
+    "1.00": {
+      "A_full": {
+        "accuracy": 0.8888888888888888,
+        "accuracy_ci95": [
+          0.8055555555555556,
+          0.9583333333333334
+        ],
+        "brier": 0.18954744846460056,
+        "brier_ci95": [
+          0.0748052437722667,
+          0.3103010681847567
+        ],
+        "macro_f1": 0.892342479299001,
+        "macro_f1_ci95": [
+          0.796997001892829,
+          0.96510393109511
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "A_full",
+        "nll": 0.375377496013841,
+        "nll_ci95": [
+          0.14647425635402886,
+          0.6433320737822307
+        ],
+        "top2_accuracy": 0.9305555555555556,
+        "top2_accuracy_ci95": [
+          0.8333333333333334,
+          1.0
+        ]
+      },
+      "B_masked": {
+        "accuracy": 0.875,
+        "accuracy_ci95": [
+          0.7777777777777778,
+          0.9583333333333334
+        ],
+        "brier": 0.188172965815624,
+        "brier_ci95": [
+          0.07516989957663546,
+          0.31123770067572903
+        ],
+        "macro_f1": 0.8747301194109706,
+        "macro_f1_ci95": [
+          0.7704188583517851,
+          0.9587395391933435
+        ],
+        "n_episodes": 72,
+        "n_scenarios": 9,
+        "name": "B_masked",
+        "nll": 0.3675951016790079,
+        "nll_ci95": [
+          0.14530979516193235,
+          0.6232579019128628
+        ],
+        "top2_accuracy": 0.9305555555555556,
+        "top2_accuracy_ci95": [
+          0.8333333333333334,
+          1.0
+        ]
+      },
+      "gap": {
+        "accuracy": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.04166666666666663,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.01388888888888884
+        },
+        "macro_f1": {
+          "ci_lower": 0.0,
+          "ci_upper": 0.062066607444413176,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.01761235988803045
+        },
+        "nll": {
+          "ci_lower": -0.019289050115356147,
+          "ci_upper": 0.03871087032205779,
+          "metric": "nll",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.007782394334833187
+        }
+      }
+    }
+  },
+  "config": {
+    "alphas": [
+      0.3,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "num_agents": 4,
+    "num_resamples": 2000,
+    "peer_avoidance_weight": 0.05,
+    "peer_spawn_radius": 2,
+    "policy_sensing_radius": 3,
+    "probe_window": 5,
+    "scenario_family": "mixed"
+  },
+  "interaction_by_family": {
+    "bottleneck": {
+      "episodes": 16,
+      "greedy_cell_held_rate": 0.042328042328042326,
+      "mean_tv_when_influenced": 0.13122759489281077,
+      "peer_blocked_rate": 0.10449735449735449,
+      "peer_influenced_rate": 0.164021164021164,
+      "steps": 756
+    },
+    "crossing": {
+      "episodes": 24,
+      "greedy_cell_held_rate": 0.08188824662813102,
+      "mean_tv_when_influenced": 0.21716307029367093,
+      "peer_blocked_rate": 0.20327552986512523,
+      "peer_influenced_rate": 0.24566473988439305,
+      "steps": 1038
+    },
+    "open": {
+      "episodes": 32,
+      "greedy_cell_held_rate": 0.047829937998228524,
+      "mean_tv_when_influenced": 0.1210336003445559,
+      "peer_blocked_rate": 0.06465899025686449,
+      "peer_influenced_rate": 0.16474756421612047,
+      "steps": 1129
+    }
+  },
+  "probe": {
+    "goal": {
+      "A_full": {
+        "accuracy": 0.32432432432432434,
+        "macro_f1": 0.305972481549299,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "B_zeroed": {
+        "accuracy": 0.34450906602805337,
+        "macro_f1": 0.318488686084731,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "C_shuffled_peers": {
+        "accuracy": 0.3345877523092713,
+        "macro_f1": 0.3077810769898962,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "D_noise": {
+        "accuracy": 0.33903523776941497,
+        "macro_f1": 0.31380166832221035,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "E_blocked_only": {
+        "accuracy": 0.3421142661648991,
+        "macro_f1": 0.3169160282416668,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "gap_A_minus_B": {
+        "accuracy": {
+          "ci_lower": -0.05672471403501551,
+          "ci_upper": 0.0172499316096869,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.020184741703729026
+        },
+        "macro_f1": {
+          "ci_lower": -0.043920347311314736,
+          "ci_upper": 0.017680618230965665,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.012516204535432007
+        }
+      },
+      "gap_A_minus_C": {
+        "accuracy": {
+          "ci_lower": -0.04491773335045731,
+          "ci_upper": 0.022265700871915886,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.010263427984946949
+        },
+        "macro_f1": {
+          "ci_lower": -0.035837104202103745,
+          "ci_upper": 0.024185078344184877,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.0018085954405971938
+        }
+      },
+      "gap_A_minus_D": {
+        "accuracy": {
+          "ci_lower": -0.04935058015759439,
+          "ci_upper": 0.020090705665044655,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.014710913445090623
+        },
+        "macro_f1": {
+          "ci_lower": -0.03744438233909616,
+          "ci_upper": 0.017958100407879075,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.007829186772911334
+        }
+      },
+      "gap_A_minus_E": {
+        "accuracy": {
+          "ci_lower": -0.058803986710963485,
+          "ci_upper": 0.02381406761177751,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.017789941840574752
+        },
+        "macro_f1": {
+          "ci_lower": -0.04715317085254488,
+          "ci_upper": 0.022276283871830026,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.0109435466923678
+        }
+      },
+      "gap_D_minus_B": {
+        "accuracy": {
+          "ci_lower": -0.013023216386593246,
+          "ci_upper": 0.0,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.005473828258638402
+        },
+        "macro_f1": {
+          "ci_lower": -0.012448817450838454,
+          "ci_upper": 0.004690147122315315,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.004687017762520673
+        }
+      },
+      "gap_E_minus_B": {
+        "accuracy": {
+          "ci_lower": -0.010788113900588257,
+          "ci_upper": 0.005549504359372708,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.0023947998631542733
+        },
+        "macro_f1": {
+          "ci_lower": -0.008586625273060255,
+          "ci_upper": 0.007661875224564326,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.0015726578430642069
+        }
+      }
+    },
+    "intention": {
+      "A_full": {
+        "accuracy": 0.46185425932261376,
+        "macro_f1": 0.44617485065200724,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "B_zeroed": {
+        "accuracy": 0.4002736914129319,
+        "macro_f1": 0.3207040621294981,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "C_shuffled_peers": {
+        "accuracy": 0.46801231611358196,
+        "macro_f1": 0.44114568393411735,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "D_noise": {
+        "accuracy": 0.45911734519329456,
+        "macro_f1": 0.437279621105259,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "E_blocked_only": {
+        "accuracy": 0.46459117345193296,
+        "macro_f1": 0.43570705625816963,
+        "n_samples": 2923,
+        "n_scenarios": 9
+      },
+      "gap_A_minus_B": {
+        "accuracy": {
+          "ci_lower": 0.020307689431640633,
+          "ci_upper": 0.09945480706202682,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.06158056790968186
+        },
+        "macro_f1": {
+          "ci_lower": 0.06905181714009984,
+          "ci_upper": 0.17297064535829462,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.12547078852250915
+        }
+      },
+      "gap_A_minus_C": {
+        "accuracy": {
+          "ci_lower": -0.02241620069657523,
+          "ci_upper": 0.007880122253786825,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.006158056790968203
+        },
+        "macro_f1": {
+          "ci_lower": -0.014940227602931453,
+          "ci_upper": 0.01994815042850835,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.005029166717889888
+        }
+      },
+      "gap_A_minus_D": {
+        "accuracy": {
+          "ci_lower": -0.010087034860947907,
+          "ci_upper": 0.014212741660285062,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.002736914129319201
+        },
+        "macro_f1": {
+          "ci_lower": -0.012384003013094632,
+          "ci_upper": 0.02552905128148896,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.008895229546748262
+        }
+      },
+      "gap_A_minus_E": {
+        "accuracy": {
+          "ci_lower": -0.012711937212417751,
+          "ci_upper": 0.006166240399264778,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": -0.002736914129319201
+        },
+        "macro_f1": {
+          "ci_lower": -0.004124464336343911,
+          "ci_upper": 0.02220826329303822,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.010467794393837604
+        }
+      },
+      "gap_D_minus_B": {
+        "accuracy": {
+          "ci_lower": 0.025375720316650443,
+          "ci_upper": 0.08902087234104768,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.05884365378036266
+        },
+        "macro_f1": {
+          "ci_lower": 0.07797422620825357,
+          "ci_upper": 0.15357259268561263,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.11657555897576088
+        }
+      },
+      "gap_E_minus_B": {
+        "accuracy": {
+          "ci_lower": 0.028637324732313108,
+          "ci_upper": 0.09792323105631869,
+          "metric": "accuracy",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.06431748203900106
+        },
+        "macro_f1": {
+          "ci_lower": 0.06848567129750961,
+          "ci_upper": 0.15616372384941385,
+          "metric": "macro_f1",
+          "n_scenarios": 9,
+          "num_resamples": 2000,
+          "point_estimate": 0.11500299412867154
+        }
+      }
+    }
+  }
+}

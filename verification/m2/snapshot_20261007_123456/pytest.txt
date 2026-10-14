@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-9.0.3, pluggy-1.6.0 -- /opt/anaconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/gankai/Desktop/Course-prj/AI/prototype
+plugins: anyio-4.12.1
+collecting ... collected 10 items
+
+verification/m2/section4_leakage_test.py::test_scenario_leakage PASSED   [ 10%]
+verification/m2/test_reproducibility.py::test_3a_single_episode_determinism_same_seed PASSED [ 20%]
+verification/m2/test_reproducibility.py::test_3b_single_episode_determinism_different_runs PASSED [ 30%]
+verification/m2/test_reproducibility.py::test_3c_episode_does_not_mutate_static_scenario PASSED [ 40%]
+verification/m2/test_reproducibility.py::test_3d_different_agent_seed_rng_consumed PASSED [ 50%]
+verification/m2/test_reproducibility.py::test_3e_episode_addressability PASSED [ 60%]
+verification/m2/test_reproducibility.py::test_3f_dataset_reproducibility_from_master_seed PASSED [ 70%]
+verification/m2/test_reproducibility.py::test_3g_implementation_diagnostics_no_global_random_seed PASSED [ 80%]
+verification/m2/test_reproducibility.py::test_3h_implementation_diagnostics_no_builtin_hash PASSED [ 90%]
+verification/m2/test_reproducibility.py::test_3i_reset_does_not_affect_static_scenario PASSED [100%]
+
+=============================== warnings summary ===============================
+verification/m2/section4_leakage_test.py::test_scenario_leakage
+  /opt/anaconda3/lib/python3.14/site-packages/_pytest/python.py:170: PytestReturnNotNoneWarning: Test functions should return None, but verification/m2/section4_leakage_test.py::test_scenario_leakage returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 10 passed, 1 warning in 1.26s =========================

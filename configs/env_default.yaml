@@ -1,0 +1,53 @@
+env:
+  grid_width: 16
+  grid_height: 16
+  obstacle_density: 0.15
+  num_candidate_targets: 4
+  max_steps: 50
+  deadlock_limit: 10
+  collision_rule: "symmetric"  # single-pass simultaneous; no agent-ID priority
+  deterministic: true
+  # Layout families, rotated by scenario index. "bottleneck" and "crossing"
+  # funnel traffic through a single shared cell so that peer interaction is
+  # frequent enough to measure (RQ2); "open" is the unstructured control.
+  scenario_family: "mixed"      # "mixed" | "open" | "bottleneck" | "crossing"
+  peer_spawn_radius: 2          # peers spawn within this Manhattan radius of the focal agent
+  peer_avoidance_weight: 0.05   # multiplicative down-weight on moving into a peer-held cell
+
+agents:
+  focal_agent:
+    planner: "stochastic_policy"
+    # Policy-only locality parameter; NOT observer visibility. With a strong
+    # avoidance weight (0.05) a radius-3 horizon makes the focal agent reroute
+    # around peers from three cells out, which is what makes RQ2 measurable:
+    # ~7% of focal steps are peer-blocked, ~14% have a perturbed action
+    # distribution, ~4.5% are forced off the direct line to the goal
+    # (measured on 24 scenarios x 4 episodes, seed 20261008; against ~2.5%
+    # peer-blocked with the M1 defaults).
+    policy_sensing_radius: 3
+    intention:
+      min_dwell_steps: 4         # minimum intention persistence
+      stochastic: true           # categorical softmax intention selection
+      blocked_detour_threshold: 2  # consecutive blocked steps before detour utility boost / re-select
+    # Base intention utilities are log(behavior_weights); they are read by
+    # src.agents.policy.StochasticPolicy (previously ignored by the policy).
+    # Tuned so no intention class exceeds the 60% triviality flag threshold
+    # (observed marginals: DIRECT ~0.43, DETOUR_LEFT ~0.28, DETOUR_RIGHT ~0.22,
+    # WAIT ~0.07 on the verification dataset).
+    behavior_weights:
+      DIRECT: 0.34
+      DETOUR_LEFT: 0.24
+      DETOUR_RIGHT: 0.24
+      WAIT: 0.18
+  other_agents:
+    count: 3                     # N = 4 agents total, matching RQ2's densest arm
+    policies: ["goal_seeker"]
+
+dataset:
+  num_scenarios: 100
+  episodes_per_scenario: 20
+  split_ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  seed: 42

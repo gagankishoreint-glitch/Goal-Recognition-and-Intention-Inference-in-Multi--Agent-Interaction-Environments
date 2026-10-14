@@ -1,0 +1,1 @@
+width=8,height=8,obstacles=(2,2),(3,3),(4,4),targets=(6,6),(7,7),agent_starts=(0,0),(1,1),num_agents=2,agent_configs=(planner:stochastic_policy,policy_sensing_radius:3,intention:{min_dwell_steps:4,stochastic:true,blocked_detour_threshold:2},behavior_weights:{DIRECT:0.6,DETOUR_LEFT:0.15,DETOUR_RIGHT:0.15,WAIT:0.1}),(planner:goal_seeker)

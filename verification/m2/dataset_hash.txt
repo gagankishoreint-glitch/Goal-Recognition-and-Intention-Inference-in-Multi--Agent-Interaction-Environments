@@ -1,0 +1,16 @@
+# Verification Dataset Fingerprint
+
+- generated: 2026-10-09T09:28:13+00:00
+- master seed: 20261008
+- scenarios: 60, episodes per scenario: 8
+- episodes: 480
+- config hash: 410df64cf3f7f224
+- dataset sha256: a452ac66fca4f3f0167c5c6870f1fe01af235c951dfc164bb8de072aa91d8373
+- schema version: 1.0.0
+- grid: 16x16, K=4 targets, N=4 agents, obstacle density 0.15
+
+## Splits (scenario level)
+
+- train: 336 episodes / 42 scenarios / goal counts {'0': 83, '1': 80, '2': 72, '3': 101}
+- val: 72 episodes / 9 scenarios / goal counts {'0': 17, '1': 23, '2': 14, '3': 18}
+- test: 72 episodes / 9 scenarios / goal counts {'0': 18, '1': 25, '2': 11, '3': 18}
